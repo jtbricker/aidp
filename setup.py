@@ -23,7 +23,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'aidp=aidp:main'
+            'aidp=main:main'
         ]
     }
 )

@@ -2,7 +2,7 @@
 
 import logging
 import argparse
-from data.modeldata import ModelData
+from aidp.data.modeldata import ModelData
 
 def main():
     """ Parses the command line arguments and determines what to do """

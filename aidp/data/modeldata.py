@@ -1,7 +1,9 @@
+"""This module contains logic related the input and output files of the aidp model"""
 import logging
 import pandas as pd
 
 class ModelData:
+    """This class represents the data and includes """
     def __init__(self, filename):
         self.logger = logging.getLogger(__name__)
         self.filename = filename

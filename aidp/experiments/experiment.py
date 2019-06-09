@@ -10,4 +10,7 @@ class Experiment:
 
         (_, _, model_files) = walk("./models/%s/" %self.key)
 
+        assert(len(model_files == 6), "There should be 6 model files")
+
 class ClinicalOnlyExperiment(Experiment):
+    self.key = 'updrs-plus'

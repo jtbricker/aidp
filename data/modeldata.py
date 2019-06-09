@@ -1,5 +1,5 @@
-import pandas as pd
 import logging
+import pandas as pd
 
 class ModelData:
     def __init__(self, filename):
@@ -14,6 +14,6 @@ class ModelData:
         try:
             self.data = pd.read_excel(self.filename)
             return self
+
         except:
             self.logger.exception('Error trying to read file: %s', self.filename)
-

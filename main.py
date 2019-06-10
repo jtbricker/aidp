@@ -3,6 +3,8 @@
 import logging
 import argparse
 from aidp.data.modeldata import ModelData
+from aidp.data.reader import ExcelDataReader
+from aidp.runners.engines import PredictionEngine
 
 def main():
     """ Parses the command line arguments and determines what to do """
@@ -15,9 +17,12 @@ def main():
     logger.info("Starting AIDP Application")
 
     # Read in csv input file
-    in_data = ModelData(args.input_file).read_data()
-    logger.debug(in_data.data.head())
+    model_data = ModelData(args.input_file, ExcelDataReader()).read_data()
+    logger.debug(model_data.data.head())
 
+    # Get prediction engine
+    engine = PredictionEngine(model_data) #TODO: Pick engine based on args
+    
     # Read model file
 
     # Predict Results

@@ -1,21 +1,16 @@
 """This module contains logic related the input and output files of the aidp model"""
-import logging
 import pandas as pd
 
 class ModelData:
     """This class represents the data and includes """
-    def __init__(self, filename):
-        self.logger = logging.getLogger(__name__)
+    def __init__(self, filename, dataReader):
+        self._data_reader = dataReader
         self.filename = filename
         self.data = None
 
     def read_data(self):
         """Reads in data as a pandas dataframe using the filename passed from the constructor
         """
-        self.logger.info("Reading in input file: %s", self.filename)
-        try:
-            self.data = pd.read_excel(self.filename)
-            return self
+        self._data_reader.read_data(self.filename)
 
-        except:
-            self.logger.exception('Error trying to read file: %s', self.filename)
+        return self 

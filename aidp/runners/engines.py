@@ -25,7 +25,7 @@ class PredictionEngine(Engine):
 
     def start(self):
         for experiment in self.experiments:
-            #TODO: add logging
+            #TODO: add logging0
             experiment.predict()
             # TODO: Do something with the results of the prediction
 

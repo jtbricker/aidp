@@ -11,7 +11,7 @@ in the aidp directory should make the `aidp` command available to use anywhere.
 ## Usage
 
 ``` bash
-aidp input_file.xlsx output_file.xlsx
+aidp predict input_file.xlsx output_file.xlsx
 ```
 
 Run

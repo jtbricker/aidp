@@ -1,4 +1,4 @@
-"""Tests for the data.modeldata module"""
+"""Tests for the aidp.data.modeldata module"""
 import unittest
 from unittest.mock import Mock
 import aidp.data.modeldata as modeldata

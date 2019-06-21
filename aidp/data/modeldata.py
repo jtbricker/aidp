@@ -11,6 +11,6 @@ class ModelData:
     def read_data(self):
         """Reads in data as a pandas dataframe using the filename passed from the constructor
         """
-        self._data_reader.read_data(self.filename)
+        self.data = self._data_reader.read_data(self.filename)
 
         return self 

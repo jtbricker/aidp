@@ -6,8 +6,14 @@ from aidp.data.experiments import ClinicalOnlyDataExperiment, ImagingOnlyDataExp
 
 class Engine(ABC):
     """Abstract Base Class for classes which execute a series of related tasks"""
-    def __init__(self):
+    def __init__(self, model_data):
         self._logger = logging.getLogger(__name__)
+        self.experiments = [
+            FullDataExperiment(),
+            ImagingOnlyDataExperiment(),
+            ClinicalOnlyDataExperiment()
+        ]
+        self.model_data = model_data
 
     @abstractmethod
     def start(self):
@@ -15,18 +21,32 @@ class Engine(ABC):
 
 class PredictionEngine(Engine):
     """Defines tasks that will be completed as part of the prediction workflow"""
-    def __init__(self, model_data):
-        self.experiments = [
-            FullDataExperiment(model_data),
-            ImagingOnlyDataExperiment(model_data),
-            ClinicalOnlyDataExperiment(model_data)
-        ]
-        super(PredictionEngine, self).__init__()
-
     def start(self):
         for experiment in self.experiments:
-            #TODO: add logging0
-            experiment.predict()
+            self._logger.info("Starting prediction experiment: %s", experiment)
+            experiment.predict(self.model_data.data)
+            self._logger.debug("Finished prediction experiment: %s", experiment)
+            
             # TODO: Do something with the results of the prediction
 
-#TODO: Define a TrainingEngine class
+class TrainingEngine(Engine):
+    """Defines tasks that will be completed as part of the training workflow"""
+    def start(self):
+        for experiment in self.experiments:
+            self._logger.info("Starting training experiment: %s", experiment)
+            experiment.train()
+            self._logger.debug("Finished training experiment: %s", experiment)
+
+def getEngine(key, model_data):
+    logger = logging.getLogger(__name__)
+
+    if key == 'predict':
+        return PredictionEngine(model_data)
+    if key == 'train':
+        return TrainingEngine(model_data)
+    else:
+        logger.error("Use of unsupported Engine key: %s", key)
+        raise NotImplementedError
+        
+            
+

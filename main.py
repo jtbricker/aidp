@@ -4,7 +4,7 @@ import logging
 import argparse
 from aidp.data.modeldata import ModelData
 from aidp.data.reader import ExcelDataReader
-from aidp.runners.engines import PredictionEngine
+from aidp.runners.engines import getEngine
 
 
 def main():
@@ -19,19 +19,11 @@ def main():
 
     # Read in csv input file
     model_data = ModelData(args.input_file, ExcelDataReader()).read_data()
-    logger.debug(model_data.data.head())
+    logger.debug(model_data.data.describe())
 
     # Get prediction engine
-    logger.info(args.cmd)
-    engine = PredictionEngine(model_data)  # TODO: Pick engine based on args
-
-    # Read model file
-
-    # Predict Results
-
-    # Format Results
-
-    # Write csv output
+    engine = getEngine(args.cmd, model_data)
+    engine.start()
 
     logger.info("Ending AIDP Application")
 
@@ -61,8 +53,6 @@ def parse_arguments():
         dictionary -- dictionary of arguments passed from the command line
     """
     parser = argparse.ArgumentParser("aidp")
-    parser.add_argument("-v", "--verbose", help="increase output verbosity",
-                        action="store_true")
 
     subparser = parser.add_subparsers(dest='cmd')
     subparser.required = True
@@ -72,8 +62,13 @@ def parse_arguments():
         "input_file", help="Input excel file with data you'd like to get predictions for")
     parser_predict.add_argument(
         "output_file", help="Name of the excel file where you want the output to be saved")
+    parser_predict.add_argument("-v", "--verbose", help="increase output verbosity",
+                        action="store_true")
 
     parser_train = subparser.add_parser("train")
     #TODO: Add training arguments
 
     return parser.parse_args()
+
+if __name__ == '__main__':
+    main()

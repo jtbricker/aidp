@@ -24,6 +24,7 @@ class DataExperiment(ABC):
 
     @abstractmethod
     def filter_data(self, data):
+        #pragma: no cover
         pass
 
     def predict(self, data):

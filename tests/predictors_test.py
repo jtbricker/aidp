@@ -1,6 +1,7 @@
 """Tests for the aidp.data.modeldata module"""
 import unittest
 from unittest.mock import Mock
+import pandas as pd
 from aidp.ml.predictors import Predictor
 
 class TestPredictor(unittest.TestCase):
@@ -22,7 +23,7 @@ class TestPredictor(unittest.TestCase):
         mock_preds = [[0.1, 0.9]]
         predictor.prediction_model.predict_proba = Mock(return_value=mock_preds)
 
-        predictor.make_predictions(['data'])
+        predictor.make_predictions(pd.DataFrame([{'GroupID':1}]))
 
         predictor.prediction_model.predict_proba.assert_called()
         assert mock_preds == predictor.predictions, "Predictions should be set"

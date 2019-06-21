@@ -1,6 +1,7 @@
 """Test for the aidp.runners.experiments module """
 import unittest
-from aidp.data.experiments import get_standardized_data, ClinicalOnlyDataExperiment, ImagingOnlyDataExperiment, FullDataExperiment
+from unittest.mock import patch, Mock
+from aidp.data.experiments import get_standardized_data, DataExperiment, ClinicalOnlyDataExperiment, ImagingOnlyDataExperiment, FullDataExperiment
 from aidp.data.modeldata import ModelData
 from aidp.data.reader import ExcelDataReader
 import pandas as pd
@@ -40,3 +41,31 @@ class TestExperiments(unittest.TestCase):
         filtered_data = FullDataExperiment().filter_data(self.model_data.data)
 
         assert len(filtered_data.columns) == 124
+
+    def test__DataExperiment_predict__executes_prediction_workflow(self):
+        data = pd.DataFrame()
+        mock_grouping = Mock()
+        mock_predictor = Mock()
+
+        experiment = DataExperimentTest()
+        experiment.groupings = [mock_grouping, Mock(), Mock()]
+        experiment.predictor = mock_predictor
+
+
+        with patch.object(experiment, 'filter_data') as mock_filter_data:
+            experiment.predict(data)
+
+        mock_filter_data.assert_called_once()
+        mock_grouping.group_data.assert_called_once()
+        assert mock_predictor.load_model_from_file.call_count == 3
+        assert mock_predictor.make_predictions.call_count == 3
+
+    def test__DataExperiment_train__executes_training_workflow(self):
+        experiment = DataExperimentTest()
+
+        experiment.train()
+
+
+class DataExperimentTest(DataExperiment):
+    def filter_data(self, data):
+        return data

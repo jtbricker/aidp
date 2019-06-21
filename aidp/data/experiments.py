@@ -31,7 +31,8 @@ class DataExperiment(ABC):
         self.filtered_data = self.filter_data(data)
         for grouping in self.groupings:
             grouping.group_data(self.filtered_data)
-            grouping.predictions = self.predictor.load_model_from_file(self.key, grouping.key).make_predictions(grouping.grouped_data)
+            self.predictor.load_model_from_file(self.key, grouping.key)
+            grouping.predictions = self.predictor.make_predictions(grouping.grouped_data)
         self._logger.info("Starting model prediction")
 
     def train(self):

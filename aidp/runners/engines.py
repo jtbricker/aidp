@@ -2,17 +2,18 @@
 from abc import ABC, abstractmethod
 import logging
 from aidp.data.experiments import ClinicalOnlyDataExperiment, ImagingOnlyDataExperiment, \
-     FullDataExperiment
+    FullDataExperiment
 
 class Engine(ABC):
     """Abstract Base Class for classes which execute a series of related tasks"""
-    def __init__(self, model_data):
-        self._logger = logging.getLogger(__name__)
-        self.experiments = [
+    _logger = logging.getLogger(__name__)
+    experiments = [
             FullDataExperiment(),
             ImagingOnlyDataExperiment(),
             ClinicalOnlyDataExperiment()
         ]
+
+    def __init__(self, model_data):
         self.model_data = model_data
 
     @abstractmethod
@@ -26,7 +27,7 @@ class PredictionEngine(Engine):
             self._logger.info("Starting prediction experiment: %s", experiment)
             experiment.predict(self.model_data.data)
             self._logger.debug("Finished prediction experiment: %s", experiment)
-            
+
             # TODO: Do something with the results of the prediction
 
 class TrainingEngine(Engine):
@@ -47,6 +48,3 @@ def getEngine(key, model_data):
     else:
         logger.error("Use of unsupported Engine key: %s", key)
         raise NotImplementedError
-        
-            
-

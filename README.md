@@ -1,6 +1,6 @@
 # AIDP Tool
 [![Build Status](https://travis-ci.org/jtbricker/aidp.svg?branch=master)](https://travis-ci.org/jtbricker/aidp)
-[![Coverage Status](https://coveralls.io/repos/github/jtbricker/aidp/badge.svg?branch=master)]
+![Coverage Status](https://coveralls.io/repos/github/jtbricker/aidp/badge.svg?branch=master)](https://coveralls.io/github/jtbricker/aidp?branch=master)
 A script for getting predictions from the AIDP model
 
 ## Installation

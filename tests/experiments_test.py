@@ -65,6 +65,15 @@ class TestExperiments(unittest.TestCase):
 
         experiment.train()
 
+    def test__ClinicalOnlyDataExperiment__str__returns_class_name(self):
+        assert ClinicalOnlyDataExperiment().__str__() == "ClinicalOnlyDataExperiment"
+    
+    def test__FullDataExperiment__str__returns_class_name(self):
+        assert FullDataExperiment().__str__() == "FullDataExperiment"
+
+    def test__ImagingOnlyDataExperiment__str__returns_class_name(self):
+        assert ImagingOnlyDataExperiment().__str__() == "ImagingOnlyDataExperiment"
+
 
 class DataExperimentTest(DataExperiment):
     def filter_data(self, data):

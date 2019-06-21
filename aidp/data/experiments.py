@@ -24,8 +24,7 @@ class DataExperiment(ABC):
 
     @abstractmethod
     def filter_data(self, data):
-        #pragma: no cover
-        pass
+        pass #pragma: no cover
 
     def predict(self, data):
         self._logger.info("Starting model prediction")

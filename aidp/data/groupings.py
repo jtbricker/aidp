@@ -8,9 +8,8 @@
 from abc import ABC, abstractmethod
 
 class DataGrouping(ABC):
-    def __init__(self):
-        self.postive_groups = []
-        self.negative_groups = []
+    postive_groups = []
+    negative_groups = []
 
     def group_data(self, data):        
         grouping = {

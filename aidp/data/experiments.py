@@ -30,9 +30,8 @@ class DataExperiment(ABC):
         self._logger.info("Starting model prediction")
         self.filtered_data = self.filter_data(data)
         for grouping in self.groupings:
-            grouping.group_data(self.filtered_data)
             self.predictor.load_model_from_file(self.key, grouping.key)
-            grouping.predictions = self.predictor.make_predictions(grouping.grouped_data)
+            grouping.predictions = self.predictor.make_predictions(self.filtered_data)
         self._logger.info("Starting model prediction")
 
     def train(self):
@@ -44,14 +43,14 @@ class DataExperiment(ABC):
         return type(self).__name__
 
 class ClinicalOnlyDataExperiment(DataExperiment):
-    key = "updrs-plus"
+    key = "updrs-plus" #
 
     def filter_data(self, data):
         standard_data = get_standardized_data(data)
         return standard_data[['GroupID', 'Age', 'Sex', 'UPDRS']]
 
 class ImagingOnlyDataExperiment(DataExperiment):
-    key = "no-updrs"
+    key = "no-updrs" #TODO: Call this dmri
 
     def filter_data(self, data):
         standard_data = get_standardized_data(data)

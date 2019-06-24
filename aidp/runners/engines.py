@@ -28,7 +28,12 @@ class PredictionEngine(Engine):
             experiment.predict(self.model_data.data)
             self._logger.debug("Finished prediction experiment: %s", experiment)
 
-            # TODO: Do something with the results of the prediction
+            # TODO: Add tests
+            for grouping in experiment.groupings:
+                column = '%s_%s (%s Probability)' %(experiment.key, grouping.key, grouping.positive_label)
+                self.model_data.add_data(column, grouping.predictions)
+
+        self.model_data.write_output_file()
 
 class TrainingEngine(Engine):
     """Defines tasks that will be completed as part of the training workflow"""

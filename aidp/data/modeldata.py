@@ -1,8 +1,12 @@
 """This module contains logic related the input and output files of the aidp model"""
+import os
+import logging
 import pandas as pd
 
 class ModelData:
     """This class represents the data and includes """
+    _logger =logging.getLogger(__name__)
+    
     def __init__(self, filename, dataReader):
         self._data_reader = dataReader
         self.filename = filename
@@ -14,3 +18,13 @@ class ModelData:
         self.data = self._data_reader.read_data(self.filename)
 
         return self 
+
+    def add_data(self, column_name, new_data):
+        #TODO: Add Tests and logging
+        self.data[column_name] = new_data 
+
+    def write_output_file(self):
+        #TODO: Add Tests and loggingss
+        new_filename = '%s_out.xlsx' %os.path.splitext(os.path.basename(self.filename))[-2]
+        
+        self.data.to_excel(new_filename)

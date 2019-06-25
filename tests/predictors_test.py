@@ -2,6 +2,7 @@
 import unittest
 from unittest.mock import Mock
 import pandas as pd
+import numpy as np
 from aidp.ml.predictors import Predictor
 
 class TestPredictor(unittest.TestCase):
@@ -20,10 +21,10 @@ class TestPredictor(unittest.TestCase):
         """ Calls predict_proba method on model and sets the predictions variable """
         predictor = Predictor()
         predictor.prediction_model = Mock()
-        mock_preds = [[0.1, 0.9]]
+        mock_preds = np.array([[0.1, 0.9]])
         predictor.prediction_model.predict_proba = Mock(return_value=mock_preds)
 
-        predictor.make_predictions(pd.DataFrame([{'GroupID':1}]))
+        predictions = predictor.make_predictions(pd.DataFrame([{'GroupID':1}]))
 
         predictor.prediction_model.predict_proba.assert_called()
-        assert mock_preds == predictor.predictions, "Predictions should be set"
+        assert mock_preds[:,1] == predictions, "Predictions should be set"

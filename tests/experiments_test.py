@@ -56,7 +56,6 @@ class TestExperiments(unittest.TestCase):
             experiment.predict(data)
 
         mock_filter_data.assert_called_once()
-        mock_grouping.group_data.assert_called_once()
         assert mock_predictor.load_model_from_file.call_count == 3
         assert mock_predictor.make_predictions.call_count == 3
 

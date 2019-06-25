@@ -19,9 +19,9 @@ class ModelData:
 
         return self 
 
-    def add_data(self, column_name, new_data):
+    def add_results(self, new_data):
         #TODO: Add Tests and logging
-        self.data[column_name] = new_data 
+        self.data = self.data.join(new_data) 
 
     def write_output_file(self):
         #TODO: Add Tests and loggingss

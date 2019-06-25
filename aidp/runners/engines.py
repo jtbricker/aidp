@@ -28,10 +28,8 @@ class PredictionEngine(Engine):
             experiment.predict(self.model_data.data)
             self._logger.debug("Finished prediction experiment: %s", experiment)
 
-            # TODO: Add tests
-            for grouping in experiment.groupings:
-                column = '%s_%s (%s Probability)' %(experiment.key, grouping.key, grouping.positive_label)
-                self.model_data.add_data(column, grouping.predictions)
+            results = experiment.get_results()
+            self.model_data.add_results(results)
 
         self.model_data.write_output_file()
 

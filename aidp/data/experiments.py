@@ -5,6 +5,7 @@
  """
 import logging
 from abc import ABC, abstractmethod
+import pandas as pd
 from aidp.data.groupings import ParkinsonsVsControlGrouping, MsaPspVsPdGrouping, MsaVsPdPspGrouping, PspVsPdMsaGrouping, PspVsMsaGrouping
 from aidp.ml.predictors import Predictor
 
@@ -38,6 +39,15 @@ class DataExperiment(ABC):
         self._logger.info("Starting model training")
         #TODO: Implement Training mechanism
         self._logger.debug("Finished model training")       
+
+    def get_results(self):
+        # TODO: Add tests
+        results = pd.DataFrame()
+        for grouping in self.groupings:
+            column = '%s_%s (%s Probability)' %(self.key, grouping.key, grouping.positive_label)
+            results[column] = grouping.predictions
+
+        return results
 
     def __str__(self):
         return type(self).__name__

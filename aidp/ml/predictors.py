@@ -27,4 +27,6 @@ class Predictor():
         
     def make_predictions(self, data):
         self._logger.info("Making predictions")
-        return self.prediction_model.predict_proba(data.drop(['GroupID'], axis=1))[:,1]
+        prediction_data = data.drop(['GroupID'], axis=1)
+        predictions = self.prediction_model.predict_proba(prediction_data)
+        return predictions[:,1]

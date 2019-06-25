@@ -43,14 +43,14 @@ class DataExperiment(ABC):
         return type(self).__name__
 
 class ClinicalOnlyDataExperiment(DataExperiment):
-    key = "updrs-plus" #
+    key = "clinical"
 
     def filter_data(self, data):
         standard_data = get_standardized_data(data)
         return standard_data[['GroupID', 'Age', 'Sex', 'UPDRS']]
 
 class ImagingOnlyDataExperiment(DataExperiment):
-    key = "no-updrs" #TODO: Call this dmri
+    key = "dmri"
 
     def filter_data(self, data):
         standard_data = get_standardized_data(data)

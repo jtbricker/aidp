@@ -23,3 +23,12 @@ Run
 aidp --help
 ``` 
 for a full list of options and argument descriptions.
+
+
+## TODO:
+
+* Add Tests where missing
+* Comment the code where necessary
+* Fully implement training module
+* Handle Deprecation / Data Casting Warnings that are printed to the console.
+* Update README with additinal installation / usage instructions

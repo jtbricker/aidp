@@ -81,6 +81,5 @@ class LinearSvcPredictor(Predictor):
         y = data['GroupID']
         X = data.drop(['GroupID'], axis=1)
         X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_seed)
-        best_model = ml.grid_search_optimization(self.classifier, self.param_grid, X_train, Y_train, X_test, Y_test, cv= self.cv, scoring= self.scoring)
-
-    def
+        self.classifier = ml.grid_search_optimization(self.classifier, self.param_grid, X_train, Y_train, X_test, Y_test, cv= self.cv, scoring= self.scoring)
+        

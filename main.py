@@ -64,7 +64,10 @@ def parse_arguments():
                         action="store_true")
 
     parser_train = subparser.add_parser("train")
-    #TODO: Add training arguments
+    parser_train.add_argument(
+        "input_file", help="Input excel file with data you'd like to train the models on")
+    parser_train.add_argument("-v", "--verbose", help="increase output verbosity",
+                        action="store_true")
 
     return parser.parse_args()
 

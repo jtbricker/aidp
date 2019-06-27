@@ -4,6 +4,7 @@
     Some subset of the input data is used for each experiment.
  """
 import logging
+import pathlib
 from abc import ABC, abstractmethod
 import pandas as pd
 from aidp.data.groupings import ParkinsonsVsControlGrouping, MsaPspVsPdGrouping, MsaVsPdPspGrouping, PspVsPdMsaGrouping, PspVsMsaGrouping
@@ -85,6 +86,8 @@ class FullDataExperiment(DataExperiment):
 
 
 def get_standardized_data(data):
-    with open('./resources/column_names.conf') as f:
+    # TODO: Find a cleaner way to do this
+    columns_conf = pathlib.Path(__file__).parent.parent.parent / 'resources/column_names.conf'
+    with open(columns_conf) as f:
         columns = f.read().splitlines() 
         return data[columns]

@@ -38,7 +38,7 @@ class TrainingEngine(Engine):
     def start(self):
         for experiment in self.experiments:
             self._logger.info("Starting training experiment: %s", experiment)
-            experiment.train()
+            experiment.train(self.model_data.data)
             self._logger.debug("Finished training experiment: %s", experiment)
 
 def getEngine(key, model_data):

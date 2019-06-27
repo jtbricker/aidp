@@ -13,18 +13,21 @@ class ModelData:
         self.data = None
 
     def read_data(self):
-        """Reads in data as a pandas dataframe using the filename passed from the constructor
-        """
+        """Reads in data as a pandas dataframe using the filename passed from the constructor"""
         self.data = self._data_reader.read_data(self.filename)
 
         return self 
 
     def add_results(self, new_data):
-        #TODO: Add Tests and logging
+        """Adds additional columns (predictions) to the class' data DataFrame"""
+        #TODO: Add tests
+        self._logger.debug("Adding %s to the data", ", ".join(new_data.columns))
         self.data = self.data.join(new_data) 
 
     def write_output_file(self):
-        #TODO: Add Tests and loggingss
+        """Writes the classes data DataFrame to disk as an excel sheet"""
+        #TODO: Add Tests
+        #FUTURE: Extract DataWriter class
         new_filename = '%s_out.xlsx' %os.path.splitext(os.path.basename(self.filename))[-2]
-        
+        self._logger.info("Writing results to output file: %s", new_filename)
         self.data.to_excel(new_filename)

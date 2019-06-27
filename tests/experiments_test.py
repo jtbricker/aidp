@@ -60,9 +60,22 @@ class TestExperiments(unittest.TestCase):
         assert mock_predictor.make_predictions.call_count == 3
 
     def test__DataExperiment_train__executes_training_workflow(self):
-        experiment = DataExperimentTest()
+        #TODO: Finish in test
+        data = pd.DataFrame()
+        mock_grouping = Mock()
+        mock_trainer = Mock()
 
-        experiment.train()
+        experiment = DataExperimentTest()
+        experiment.groupings = [mock_grouping, Mock(), Mock()]
+        experiment.trainer = mock_trainer
+
+
+        with patch.object(experiment, 'filter_data') as mock_filter_data:
+            experiment.train(data)
+
+        mock_grouping.group_data.assert_called_once()
+        mock_filter_data.assert_called_once()
+        assert mock_trainer.train_model.call_count == 3
 
     def test__ClinicalOnlyDataExperiment__str__returns_class_name(self):
         assert ClinicalOnlyDataExperiment().__str__() == "ClinicalOnlyDataExperiment"

@@ -8,11 +8,6 @@ import os
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix, make_scorer, roc_curve, classification_report
 import numpy as np
-import matplotlib as mpl
-if os.environ.get('DISPLAY','') == '':
-   print('no display found. Using non-interactive Agg backend')
-   mpl.use('Agg')
-import matplotlib.pyplot as plt
 
 def specificity(y_true, y_pred):
     """ Calculates the specificity (Selectivity, True Negative Rate)
@@ -179,7 +174,7 @@ def get_metrics(model, X, y, scoring_list={'accuracy':make_scorer(accuracy_score
 
     return metrics
 
-def plot_roc(model, X_test, Y_test, verbose=False, show_plot=True):
+def plot_roc(model, X_test, Y_test, verbose=False):
     """Diplays the roc curve given the model and test data
     
     Arguments:
@@ -205,20 +200,12 @@ def plot_roc(model, X_test, Y_test, verbose=False, show_plot=True):
         for a,b in zip(Y_test,y_pred_prob):
             print(a,b)
     
-    if show_plot:
-        plt.plot([0,1],[0,1], 'k--')
-        plt.plot(fpr, tpr, label='Linear SVC')
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Linear SVC ROC Curve')
-        plt.show(block=False)
-    
     if verbose:
         print("ROC RAW DATA:")
         for a,b in zip(fpr, tpr):
             print(a,b)
 
-def plot_coefficients(classifier, feature_names, top_features=20, show_plot=True):
+def plot_coefficients(classifier, feature_names, top_features=20):
     """Creates a barplot of the top most important features
     
     Arguments:
@@ -233,14 +220,6 @@ def plot_coefficients(classifier, feature_names, top_features=20, show_plot=True
     top_positive_coefficients = np.argsort(coef)[-top_features:]
     top_negative_coefficients = np.argsort(coef)[:top_features]
     top_coefficients = np.hstack([top_negative_coefficients, top_positive_coefficients])
-    if show_plot:
-        # create plot
-        plt.figure(figsize=(15, 5))
-        colors = ['red' if c < 0 else 'blue' for c in coef[top_coefficients]]
-        plt.bar(np.arange(2 * top_features), coef[top_coefficients], color=colors)
-        feature_names = np.array(feature_names)
-        plt.xticks(np.arange(1, 1 + 2 * top_features), feature_names[top_coefficients], rotation=60, ha='right')
-        plt.show()
 
 def print_feature_importance(feature_names, coefs):
     """Helper method to pair and print feature name/important
@@ -254,7 +233,7 @@ def print_feature_importance(feature_names, coefs):
     for feature, coef in zip(feature_names, coefs):
         print("%s\t%s" %(feature, coef))
 
-def plot_confusion_matrix(cm, classes=[0,1], normalize=False, title='Confusion matrix', print_matrix=False, show_plot=True):
+def plot_confusion_matrix(cm, classes=[0,1], normalize=False, title='Confusion matrix', print_matrix=False):
     """This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
     
@@ -276,25 +255,6 @@ def plot_confusion_matrix(cm, classes=[0,1], normalize=False, title='Confusion m
 
     if print_matrix:
         print(cm)
-
-    if show_plot:
-        plt.imshow(cm, interpolation='nearest')
-        plt.title(title)
-        plt.colorbar()
-        tick_marks = np.arange(len(classes))
-        plt.xticks(tick_marks, classes, rotation=45)
-        plt.yticks(tick_marks, classes)
-
-        fmt = '.2f' if normalize else 'd'
-        thresh = cm.max() / 2.
-        for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-            plt.text(j, i, format(cm[i, j], fmt),
-                    horizontalalignment="center",
-                    color="white" if cm[i, j] > thresh else "black")
-
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
-        plt.tight_layout()
 
 def grid_search_optimization(pipeline, parameters_to_tune, X, y, Xh, yh, cv=5, scoring='accuracy', verbose=False, n_jobs=-1):
     """ Performs a grid-search optimization with cross validation with the provided hyperparameters

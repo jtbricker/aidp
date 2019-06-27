@@ -1,6 +1,7 @@
 """ This module defines logic around training machine learning models and using those model to make predictions """
 import logging
 import pickle
+import pathlib
 from sklearn.base import BaseEstimator
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import make_scorer, accuracy_score, recall_score, precision_score, roc_auc_score
@@ -18,8 +19,9 @@ class Predictor():
     name = __name__
     _logger = logging.getLogger(__name__)
 
-    def load_model_from_file(self, experiment_key, comparison_key):
-        filepath = "./resources/models/%s/%s.pkl" %(experiment_key, comparison_key)
+    def load_model_from_file(self, experiment_key, comparison_key, model_key="default"):
+        # TODO: Find a cleaner way to do this
+        filepath = pathlib.Path(__file__).parent.parent.parent / ('resources/models/%s/%s/%s.pkl' %(model_key, experiment_key, comparison_key))
         self._logger.info("Loading model from file: %s", filepath)
         
         try:
@@ -79,4 +81,5 @@ class LinearSvcPredictor(Predictor):
         y = data['GroupID']
         X = data.drop(['GroupID'], axis=1)
         X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=self.test_size, random_state=self.random_seed)
-        best_model = ml.grid_search_optimization(self.classifier, self.param_grid, X_train, Y_train, X_test, Y_test, cv= self.cv, scoring= self.scoring)
+        self.classifier = ml.grid_search_optimization(self.classifier, self.param_grid, X_train, Y_train, X_test, Y_test, cv= self.cv, scoring= self.scoring)
+        

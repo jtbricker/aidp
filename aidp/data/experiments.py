@@ -20,7 +20,6 @@ class DataExperiment(ABC):
         PspVsMsaGrouping()
     ]
     predictor = Predictor()
-    trainer = LinearSvcPredictor()
 
     def __init__(self):
         self._logger = logging.getLogger(__name__)
@@ -44,7 +43,9 @@ class DataExperiment(ABC):
         for grouping in self.groupings:
             grouping.group_data(filtered_data).grouped_data
             self._logger.debug("Training model for grouping: %s", grouping.key)
-            self.trainer.train_model(grouping.grouped_data) #Returns a Predictor() object
+           
+            trainer = LinearSvcPredictor()   
+            trainer.train_model(grouping.grouped_data) #Returns a Predictor() object
             # Write report of the results
             # Write model to pickle file 
         self._logger.debug("Finished model training")       

@@ -1,5 +1,7 @@
 """This module defines execution engines that will perform work"""
+
 from abc import ABC, abstractmethod
+from datetime import datetime
 import logging
 from aidp.data.experiments import ClinicalOnlyDataExperiment, ImagingOnlyDataExperiment, \
     FullDataExperiment
@@ -22,10 +24,10 @@ class Engine(ABC):
 
 class PredictionEngine(Engine):
     """Defines tasks that will be completed as part of the prediction workflow"""
-    def start(self):
+    def start(self, model_key='default'):
         for experiment in self.experiments:
             self._logger.info("Starting prediction experiment: %s", experiment)
-            experiment.predict(self.model_data.data)
+            experiment.predict(self.model_data.data, model_key)
             self._logger.debug("Finished prediction experiment: %s", experiment)
 
             results = experiment.get_results()
@@ -35,10 +37,10 @@ class PredictionEngine(Engine):
 
 class TrainingEngine(Engine):
     """Defines tasks that will be completed as part of the training workflow"""
-    def start(self):
+    def start(self, model_key = datetime.now().strftime("%Y-%m-%d-%H%M%S%f")):
         for experiment in self.experiments:
             self._logger.info("Starting training experiment: %s", experiment)
-            experiment.train(self.model_data.data)
+            experiment.train(self.model_data.data, model_key)
             self._logger.debug("Finished training experiment: %s", experiment)
 
 def getEngine(key, model_data):

@@ -2,6 +2,8 @@
 
 import logging
 import argparse
+from datetime import datetime
+
 from aidp.data.modeldata import ModelData
 from aidp.data.reader import ExcelDataReader
 from aidp.runners.engines import getEngine
@@ -21,9 +23,9 @@ def main():
     model_data = ModelData(args.input_file, ExcelDataReader()).read_data()
     logger.debug(model_data.data.describe())
 
-    # Get prediction engine
+    # Get prediction/training engine
     engine = getEngine(args.cmd, model_data)
-    engine.start()
+    engine.start(model_key=args.model_key)
 
     logger.info("Ending AIDP Application")
 
@@ -62,12 +64,18 @@ def parse_arguments():
         "input_file", help="Input excel file with data you'd like to get predictions for")
     parser_predict.add_argument("-v", "--verbose", help="increase output verbosity",
                         action="store_true")
+    parser_predict.add_argument("--model_key", help="""(Optional) Name of the models to use for predictions.
+    These models should exist in their own folder in /resources/models/<model_key>.  If no model is
+     provided 'default' is used""", default='default')
 
     parser_train = subparser.add_parser("train")
     parser_train.add_argument(
         "input_file", help="Input excel file with data you'd like to train the models on")
     parser_train.add_argument("-v", "--verbose", help="increase output verbosity",
                         action="store_true")
+    parser_train.add_argument("--model_key", help="""(Optional) Name of the folder where the newly 
+    trained will be stored (in /resources/models/<model_key>).  If no name is provided, a timestamp
+    is used""", default=datetime.now().strftime("%Y-%m-%d-%H%M%S%f"))
 
     return parser.parse_args()
 

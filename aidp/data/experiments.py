@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from aidp.data.groupings import ParkinsonsVsControlGrouping, MsaPspVsPdGrouping, MsaVsPdPspGrouping, PspVsPdMsaGrouping, PspVsMsaGrouping
 from aidp.ml.predictors import Predictor, LinearSvcPredictor
+from aidp.report.writers import LogReportWriter
 
 class DataExperiment(ABC):
     key = None
@@ -19,7 +20,7 @@ class DataExperiment(ABC):
         PspVsPdMsaGrouping(),
         PspVsMsaGrouping()
     ]
-    predictor = Predictor()
+    report_writer = LogReportWriter()
 
     def __init__(self):
         self._logger = logging.getLogger(__name__)
@@ -28,26 +29,30 @@ class DataExperiment(ABC):
     def filter_data(self, data):
         pass #pragma: no cover
 
-    def predict(self, data):
+    def predict(self, data, model_key):
         self._logger.info("Starting model prediction")
         filtered_data = self.filter_data(data)
         for grouping in self.groupings:
-            self.predictor.load_model_from_file(self.key, grouping.key)
-            grouping.predictions = self.predictor.make_predictions(filtered_data)
+            predictor = Predictor()
+            predictor.load_model_from_file(self.key, grouping.key, model_key)
+            grouping.predictions = predictor.make_predictions(filtered_data)
         self._logger.info("Starting model prediction")
 
-    def train(self, data):
+    def train(self, data, model_key):
         self._logger.info("Starting model training")
         #TODO: Implement Training mechanism
         filtered_data = self.filter_data(data)
         for grouping in self.groupings:
             grouping.group_data(filtered_data).grouped_data
             self._logger.debug("Training model for grouping: %s", grouping.key)
-           
-            trainer = LinearSvcPredictor()   
-            trainer.train_model(grouping.grouped_data) #Returns a Predictor() object
+            trainer = LinearSvcPredictor()
+            trainer.train_model(grouping.grouped_data) 
             # Write report of the results
-            # Write model to pickle file 
+            self.report_writer.write_report(trainer.classifier.best_estimator_, trainer.X_train, trainer.Y_train, trainer.X_test, trainer.Y_test)
+
+            # Write model to pickle file
+            trainer.save_model_to_file(self.key, grouping.key, model_key)
+             
         self._logger.debug("Finished model training")       
 
     def get_results(self):
@@ -66,7 +71,6 @@ class ClinicalOnlyDataExperiment(DataExperiment):
     key = "clinical"
 
     def filter_data(self, data):
-        # TODO: Add comment about what columns are being filtered
         standard_data = get_standardized_data(data)
         return standard_data[['GroupID', 'Age', 'Sex', 'UPDRS']]
 
@@ -74,7 +78,6 @@ class ImagingOnlyDataExperiment(DataExperiment):
     key = "dmri"
 
     def filter_data(self, data):
-        # TODO: Add comment about what columns are being filtered
         standard_data = get_standardized_data(data)
         return standard_data.drop(['UPDRS'], axis=1)
 
@@ -82,7 +85,6 @@ class FullDataExperiment(DataExperiment):
     key = "both"
 
     def filter_data(self, data):
-        # TODO: Add comment about what columns are being filtered
         return get_standardized_data(data)
 
 

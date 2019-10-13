@@ -43,7 +43,7 @@ class Predictor():
             filepath = pathlib.Path(__file__).parent.parent.parent / ('resources/models/%s/%s/%s.pkl' %(model_key, experiment_key, comparison_key))
         
             #Make sure the directory exists
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            os.makedirs(os.path.dirname(str(filepath)), exist_ok=True)
 
             self._logger.info("Attempting to save model to file: %s", filepath)        
             with open(str(filepath), 'wb') as pickle_file:

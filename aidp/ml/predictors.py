@@ -25,7 +25,7 @@ class Predictor():
         self._logger.info("Loading model from file: %s", filepath)
         
         try:
-            with open(filepath, "rb") as f:
+            with open(str(filepath), "rb") as f:
                 self.classifier = pickle.load(f)
             
             self._logger.debug("Sucessfully loaded model: %s", self.classifier)
@@ -46,7 +46,7 @@ class Predictor():
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
             self._logger.info("Attempting to save model to file: %s", filepath)        
-            with open(filepath, 'wb') as pickle_file:
+            with open(str(filepath), 'wb') as pickle_file:
                 pickle.dump(self.classifier, pickle_file)
 
         except:

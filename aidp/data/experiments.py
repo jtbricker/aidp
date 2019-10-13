@@ -92,6 +92,6 @@ class FullDataExperiment(DataExperiment):
 def get_standardized_data(data):
     # TODO: Find a cleaner way to do this
     columns_conf = pathlib.Path(__file__).parent.parent.parent / 'resources/column_names.conf'
-    with open(columns_conf) as f:
+    with open(str(columns_conf)) as f:
         columns = f.read().splitlines() 
         return data[columns]

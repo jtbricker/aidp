@@ -38,7 +38,7 @@ class DataExperiment(ABC):
             grouping.predictions = predictor.make_predictions(filtered_data)
         self._logger.info("Starting model prediction")
 
-    def train(self, data, model_key):
+    def train(self, data, model_key, save_models=True):
         self._logger.info("Starting model training")
         #TODO: Implement Training mechanism
         filtered_data = self.filter_data(data)
@@ -51,7 +51,8 @@ class DataExperiment(ABC):
             self.report_writer.write_report(trainer.classifier.best_estimator_, trainer.X_train, trainer.Y_train, trainer.X_test, trainer.Y_test)
 
             # Write model to pickle file
-            trainer.save_model_to_file(self.key, grouping.key, model_key)
+            if save_models:
+                trainer.save_model_to_file(self.key, grouping.key, model_key)
              
         self._logger.debug("Finished model training")       
 

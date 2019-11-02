@@ -7,23 +7,8 @@ if sys.version_info < (3,0):
 with open("README.md", "r") as readme_file:
     README = readme_file.read()
 
-REQUIREMENTS = [
-    "et-xmlfile",
-    "imbalanced-learn",
-    "imblearn",
-    "jdcal",
-    "joblib",
-    "numpy",
-    "openpyxl<3",
-    "pandas",
-    "python-dateutil",
-    "pytz",
-    "scikit-learn",
-    "scipy",
-    "six",
-    "sklearn",
-    "xlrd"
-]
+with open("requirements.txt", 'r') as f:
+    REQUIREMENTS = f.read().splitlines()
 
 setup(
     name="aidp",

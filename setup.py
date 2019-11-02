@@ -1,14 +1,18 @@
 from setuptools import setup, find_packages
+import sys
+
+if sys.version_info < (3,0):
+    sys.exit('Sorry, Python 2 is not supported')
 
 with open("README.md", "r") as readme_file:
     README = readme_file.read()
 
 with open('requirements.txt') as f:
-    REQUIREMENTS = f.read().splitlines()
+    REQUIREMENTS = [dep.split('==')[0] for dep in f.read().splitlines()]
 
 setup(
     name="aidp",
-    version="0.0.1",
+    version="1.0.0",
     author="Justin Bricker",
     author_email="jt.bricker@gmail.com",
     description="A tool for interacting with AIDP model",

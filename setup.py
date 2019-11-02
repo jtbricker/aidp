@@ -8,7 +8,23 @@ with open("README.md", "r") as readme_file:
     README = readme_file.read()
 
 with open('requirements.txt') as f:
-    REQUIREMENTS = [dep.split('==')[0] for dep in f.read().splitlines()]
+    REQUIREMENTS = [
+        "et-xmlfile",
+        "imbalanced-learn",
+        "imblearn",
+        "jdcal",
+        "joblib",
+        "numpy",
+        "openpyxl<3",
+        "pandas",
+        "python-dateutil",
+        "pytz",
+        "scikit-learn",
+        "scipy",
+        "six",
+        "sklearn",
+        "xlrd"
+    ]
 
 setup(
     name="aidp",

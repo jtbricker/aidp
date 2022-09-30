@@ -2,7 +2,7 @@ et-xmlfile==1.0.1
 imbalanced-learn==0.5.0
 imblearn==0.0
 jdcal==1.4.1
-joblib==0.14.0
+joblib==1.2.0
 numpy==1.17.3
 openpyxl==2.6.4
 pandas==0.24.2
